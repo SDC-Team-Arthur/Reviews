@@ -59,3 +59,9 @@ COPY characteristics_reviews(id, characteristic_id, review_id, value)
 FROM '/Users/harrisonzhao/Hack Reactor/SDC/Reviews Data/characteristic_reviews.csv'
 DELIMITER ','
 CSV HEADER;
+
+SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"reviews"', 'id')), (SELECT (MAX("id") + 1) FROM "reviews"), FALSE);
+
+SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"reviews_photos"', 'id')), (SELECT (MAX("id") + 1) FROM "reviews_photos"), FALSE);
+
+SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"characteristics_reviews"', 'id')), (SELECT (MAX("id") + 1) FROM "characteristics_reviews"), FALSE);
