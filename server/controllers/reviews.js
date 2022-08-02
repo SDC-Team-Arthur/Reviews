@@ -5,7 +5,9 @@ const get = (req, res) => {
   const page = req.query.page || 1;
   const count = req.query.count || 5;
   const sort = req.query.sort;
+  const productId = req.query.product_id;
   const offset = count * (page - 1);
+
   pool
     .query(`
       SELECT
@@ -18,28 +20,31 @@ const get = (req, res) => {
         (TO_TIMESTAMP(r.date/1000)) AS date,
         r.reviewer_name,
         r.helpfulness,
-        (SELECT
+        (SELECT COALESCE(
           JSON_AGG(
             JSON_BUILD_OBJECT(
             'id', p.id,
-            'url', p.url
-            )
-          )
+            'url', p.url)
+          ), '[]'::json)
         AS photos FROM reviews_photos p WHERE p.review_id=r.id
         )
       FROM reviews r
-      WHERE r.product_id=2 AND r.reported=false
+      WHERE r.product_id=${productId} AND r.reported=false
       ORDER BY ${sort === 'helpful' ? 'helpfulness' : 'date'}
       DESC LIMIT ${count} OFFSET ${offset}
     `)
     .then((data) => {
-      res.send(data.rows)
+      res.send({
+        product: productId,
+        page: page,
+        count: count,
+        results: data.rows
+      })
     })
     .catch(err => console.log(err))
 };
 
 const add = (req, res) => {
-  console.log(req.body);
   const {product_id, rating, summary, body, recommend, name, email, photos, characteristics} = req.body
   const date = Math.round((new Date()).getTime());
   let queryString = photos.length === 0
