@@ -1,6 +1,6 @@
 const {url, PORT} = require('../config.js');
 const express = require('express');
-const controllers = require('./controllers')
+const controllers = require('./controllers');
 
 const app = express();
 app.use(express.json());
