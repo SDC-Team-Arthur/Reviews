@@ -5,7 +5,7 @@ const get = (req, res) => {
   const page = req.query.page || 1;
   const count = req.query.count || 5;
   const sort = req.query.sort;
-  const productId = req.query.product_id;
+  const productId = req.query.product_id || 1;
   const offset = count * (page - 1);
 
   pool
