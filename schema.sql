@@ -61,7 +61,10 @@ DELIMITER ','
 CSV HEADER;
 
 SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"reviews"', 'id')), (SELECT (MAX("id") + 1) FROM "reviews"), FALSE);
-
 SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"reviews_photos"', 'id')), (SELECT (MAX("id") + 1) FROM "reviews_photos"), FALSE);
-
 SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"characteristics_reviews"', 'id')), (SELECT (MAX("id") + 1) FROM "characteristics_reviews"), FALSE);
+
+CREATE INDEX chararacteristics_reviewsIdx ON characteristics_reviews (characteristic_id);
+CREATE INDEX characteristicsIdx ON characteristics (product_id);
+CREATE INDEX reviewsIdx ON reviews (product_id);
+CREATE INDEX photosIdx ON reviews_photos (review_id);
