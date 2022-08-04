@@ -1,7 +1,6 @@
 const {pool} = require('../../db.js');
 
 const get = (req, res) => {
-  console.log('ran metadata get');
   const productId = req.query.product_id || 1;
   pool
     .query(`

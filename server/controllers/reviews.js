@@ -1,7 +1,6 @@
 const {pool} = require('../../db.js');
 
 const get = (req, res) => {
-  console.log('ran reviews get')
   const page = req.query.page || 1;
   const count = req.query.count || 5;
   const sort = req.query.sort;
